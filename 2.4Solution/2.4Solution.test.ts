@@ -46,7 +46,7 @@ describe("Employee Manager 1.2", () => {
         */
         await driver.findElement(bernice).click();
         await driver.wait(
-            until.elementIsVisible(await driver.findElement(nameInput))
+            until.elementIsVisible(await driver.findElement(bernice))
         );
         await driver.findElement(nameInput).clear();
         await driver.findElement(nameInput).sendKeys("Test Name");
@@ -65,8 +65,8 @@ describe("Employee Manager 1.2", () => {
             )
         );
         expect(
-            await (await driver.findElement(nameInput)).getAttribute("")
-        ).toBe("");
+            await (await driver.findElement(nameInput)).getAttribute("value")
+        ).toBe("Bernice Ortiz");
         });
 
         test("A canceled change doesn't persist", async () => {
@@ -83,11 +83,10 @@ describe("Employee Manager 1.2", () => {
             );
             await driver.findElement(nameInput).clear();
             await driver.findElement(nameInput).sendKeys("Test Name");
-            await driver.findElement(cancelButton).click(); 
-            // idk what to put for getAttribute - ask Mars! 
+            await driver.findElement(cancelButton).click();
             expect(
-                await (await driver.findElement(nameInput)).getAttribute("")
-            ).toBe("");
+                await (await driver.findElement(nameInput)).getAttribute("value")
+            ).toBe("Phillip Weaver");
         });
 
         test("A saved change persists", async () => {
@@ -110,15 +109,14 @@ describe("Employee Manager 1.2", () => {
             await driver.findElement(phillip).click();
             await driver.wait(
                 until.elementTextContains(
-                await driver.findElement(bernice),
-                "Phillip"
+                await driver.findElement(phillip),
+                "Phillip Weaver"
                 )
             );
             await driver.findElement(bernice).click();
-            // so getAttribute needs to be "value"? what exactly is this below - ask Mars
             expect(
                 await (await driver.findElement(nameInput)).getAttribute("value")
-            ).toBe("Bernice Ortiz");
+            ).toBe("Test Name");
     });
 });
 
@@ -165,9 +163,9 @@ describe("Employee Manager 1.2", () => {
                 "The name field must be between 1 and 30 characters long."
             );
             await driver.findElement(nameInput).sendKeys(Key.SPACE);
-            await driver.findElement(cancelButton).click();
+            await driver.findElement(nameInput).click();
             driver.wait(() => true, 500);
-            expect(await driver.findElements(errorCard)).toHaveLength(0);
+            expect(await driver.findElements(errorCard)).not.toHaveLength(0);
         });
     });
 });
